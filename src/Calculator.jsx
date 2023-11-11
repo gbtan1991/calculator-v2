@@ -52,9 +52,11 @@ const compute = () => {
     setOperation(null);
     setPrevOperand('');
 
+    
+
 }
 
-const buttonClick = (value) => {
+const handleClick = (value) => {
     let buttonNumbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
     let buttonOperands = ['+', '-', '*', '÷'];
     
@@ -78,12 +80,12 @@ const buttonClick = (value) => {
       {/* OUTPUT */}
       <div className="">
         <div>{prevOperand}</div>
-        <div>{currOperand}</div>
+        <div>{currOperand} test</div>
       </div>
 
     <div className="grid grid-cols-4 border">
     {buttonValues.map((value) => (
-      <Button key={value} value={value} onClick={buttonClick}/>
+      <Button key={value} value={value} onClick={handleClick}/>
     ))}
 
     </div>
