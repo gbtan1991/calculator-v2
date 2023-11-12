@@ -1,96 +1,63 @@
-import React, { useState } from "react";
-import Button from "./Button.jsx"
+import { useReducer } from "react";
+
+export const ACTIONS = {
+  ADD_DIGIT : 'add-digit',
+  CHOOSE_OPERATION : 'choose-operation',
+  CLEAR : 'clear',
+  DELETE_DIGIT : 'delete-digit',
+  EVALUATE : 'evaluate'
+}
+
+
+function reducer(state, { type, payload}) {
+  switch (type) {
+    case ACTIONS.ADD_DIGIT:
+        if(state.overwrite) {
+          return{
+            ...state,
+            currentOperand: payload.digit
+            overwrite: false,
+          }
+        }
+}
+
 
 const Calculator = () => {
+  const [{ currentOperand, previousOperand, operation }, dispatch] = useReducer(
+    reducer,
+    {}
+  )
 
-const [prevOperand, setPrevOperand] = useState('');
-const [currOperand, setCurrOperand] = useState('');
-const [operation, setOperation] = useState(null);
-
-
-
-
-const appendNumber = (number) => {
-  if(number === '.' && currOperand.includes('.') ) return;
-  setCurrOperand(currOperand + number);
-};
-
-const chooseOperation = (selectedOperation) => {
-  if (currOperand === '') return;
-  if (prevOperand !== '') {
-    compute();
-  }
-  setOperation(selectedOperation);
-  setPrevOperand(currOperand);
-  setCurrOperand('');
-};
-
-
-const compute = () => {
-  let result;
-  const prev = parseFloat(prevOperand);
-  const curr = parseFloat(currOperand);
-  if (isNaN(prev) || isNaN(curr)) return;
-
-  switch (operation) {
-    case '+':
-      result = prev + curr;
-      break;
-    case '-':
-      result = prev - curr;
-      break;
-    case '*':
-      result = prev * curr;
-      break;
-    case '÷':
-      result = prev / curr;
-      break;
-    default:
-      return;
-  }
-    setCurrOperand(result.toString());
-    setOperation(null);
-    setPrevOperand('');
-
-    
-
-}
-
-const handleClick = (value) => {
-    let buttonNumbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-    let buttonOperands = ['+', '-', '*', '÷'];
-    
-
-    if(buttonNumbers.includes(value)) {
-      appendNumber(value);
-    } else if (buttonOperands.includes(value)) {
-      chooseOperation(value);
-    } else if (value === 'AC') {
-
-    }
-
-
-}
-
-
-  const buttonValues = ['AC', 'DEL', '+', '1', '2', '3', '-', '4', '5', '6', '*', '7', '8', '9','÷', '.', '0', '='];
 
   return (
-    <div className="pt-8 cols">
-      {/* OUTPUT */}
-      <div className="">
-        <div>{prevOperand}</div>
-        <div>{currOperand} test</div>
+    <div>
+      <div>
+        <div>
+          {previousOperand} {operation}
+        </div>
+        <div>{currentOperand}</div>
       </div>
 
-    <div className="grid grid-cols-4 border">
-    {buttonValues.map((value) => (
-      <Button key={value} value={value} onClick={handleClick}/>
-    ))}
-
-    </div>
-      
-      
+      <div>
+        <button>AC</button>
+        <button>⌫</button>
+        <button>÷</button>
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>*</button>
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button>+</button>
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <button>-</button>
+        <button>.</button>
+        <button>0</button>
+        <button>=</button>
+      </div>
     </div>
   );
 };
