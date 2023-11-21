@@ -19,6 +19,7 @@ const CalcBody = ( onClick ) => {
           setCurrentOperand('0');
           break;
     
+        //EQUALS BUTTON
         case '=':
           if (operator && previousOperand !== '') {
             setPreviousOperand('');
@@ -29,20 +30,24 @@ const CalcBody = ( onClick ) => {
           }
           break;
     
+          //CLEAR BUTTON
         case 'AC':
           setPreviousOperand('');
           setCurrentOperand('0');
           setOperator(null);
           break;
     
+          //DELETE BUTTON
         case '⌫':
           setCurrentOperand((prev) => prev.slice(0, -1) || '0');
           break;
         
+          //NEGATIVE-POSITIVE BUTTON
         case '±':
           setCurrentOperand((prev) => (prev === '0' ? '0' : (parseFloat(prev) * -1).toString()));
           break;
 
+          //
           case '.':
             if (!currentOperand.includes('.')) {
               setCurrentOperand((prev) => (prev === '0' || operator ? '0' : prev) + buttonLabel);
@@ -50,7 +55,12 @@ const CalcBody = ( onClick ) => {
             break;
       
           default:
-            setCurrentOperand((prev) => (prev === '0' || operator ? buttonLabel : prev + buttonLabel));
+            setCurrentOperand((prev) => {
+              
+              const isNewNumber = prev === '0';
+              return isNewNumber ? buttonLabel : prev + buttonLabel;
+              
+            });
             break;
       }
     };
@@ -124,8 +134,8 @@ const CalcBody = ( onClick ) => {
     ];
     
   return (
-    <div className='w-[300px] h-[600px] bg-stone-900 rounded-3xl border border-stone-800 flex flex-col items-center justify-center gap-4'>
-      <Screen currentOperand={currentOperand} previousOperand={previousOperand} />
+    <div className='w-[300px] h-[600px] bg-gradient-to-b from-stone-700 to-stone-800 rounded-3xl border border-stone-800 flex flex-col items-center justify-center gap-4'>
+      <Screen currentOperand={currentOperand} previousOperand={previousOperand} operator={operator}/>
       <div className="grid grid-cols-4 gap-3">
       {buttonLabels.map((label) => (
           <Button key={label} label={label} onClick={() => handleButtonClick(label)} />
