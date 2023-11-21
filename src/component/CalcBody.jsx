@@ -14,9 +14,12 @@ const CalcBody = ( onClick ) => {
         case '*':
         case '÷':
         case '%':
+
+        
           setOperator(buttonLabel);
           setPreviousOperand(currentOperand);
           setCurrentOperand('0');
+        
           break;
     
         //EQUALS BUTTON
@@ -134,13 +137,15 @@ const CalcBody = ( onClick ) => {
     ];
     
   return (
-    <div className='w-[300px] h-[600px] bg-gradient-to-b from-stone-700 to-stone-800 rounded-3xl border border-stone-800 flex flex-col items-center justify-center gap-4'>
+    <div className='w-[300px] bg-gradient-to-b from-stone-700 to-stone-800 rounded-3xl border border-stone-800 flex flex-col items-center justify-center gap-4 p-10'>
+      <div className='flex flex-col gap-4 w-[260px]'>
       <Screen currentOperand={currentOperand} previousOperand={previousOperand} operator={operator}/>
       <div className="grid grid-cols-4 gap-3">
       {buttonLabels.map((label) => (
           <Button key={label} label={label} onClick={() => handleButtonClick(label)} />
         ))}
         
+      </div>
       </div>
       
     </div>
