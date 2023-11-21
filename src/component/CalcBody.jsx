@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Screen from './Screen.jsx';
 import Button from './Button.jsx';
 
@@ -38,10 +38,20 @@ const CalcBody = ( onClick ) => {
         case '⌫':
           setCurrentOperand((prev) => prev.slice(0, -1) || '0');
           break;
-    
-        default:
-          setCurrentOperand((prev) => (prev === '0' || operator ? buttonLabel : prev + buttonLabel));
+        
+        case '±':
+          setCurrentOperand((prev) => (prev === '0' ? '0' : (parseFloat(prev) * -1).toString()));
           break;
+
+          case '.':
+            if (!currentOperand.includes('.')) {
+              setCurrentOperand((prev) => (prev === '0' || operator ? '0' : prev) + buttonLabel);
+            }
+            break;
+      
+          default:
+            setCurrentOperand((prev) => (prev === '0' || operator ? buttonLabel : prev + buttonLabel));
+            break;
       }
     };
     
@@ -61,6 +71,49 @@ const CalcBody = ( onClick ) => {
           return current;
       }
     };
+
+
+    useEffect(() => {
+      const handleKeyDown = (event) => {
+        const key = event.key;
+  
+        if (/^[0-9]$/.test(key)) {
+          handleButtonClick(key);
+        } else {
+          switch (key) {
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+              handleButtonClick(key);
+              break;
+            case 'Enter':
+              event.preventDefault();
+              handleButtonClick('=');
+              break;
+            case 'Backspace':
+              handleButtonClick('⌫');
+              break;
+            case 'Escape':
+              handleButtonClick('AC');
+              break;
+            case '.':
+              handleButtonClick('.');
+              break;
+            default:
+              break;
+          }
+        }
+      };
+  
+      window.addEventListener('keydown', handleKeyDown);
+  
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }, [handleButtonClick]);
+
+
     
     const buttonLabels = [
       '±', '%', '⌫','AC', 
