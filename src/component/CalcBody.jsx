@@ -3,11 +3,48 @@ import Screen from './Screen.jsx';
 import Button from './Button.jsx';
 
 const CalcBody = ( onClick ) => {
-    const [currentOperand, setCurrentOperand] = useState('')
+    const [currentOperand, setCurrentOperand] = useState('0')
     const [previousOperand, setPreviousOperand] = useState('')
     const [operator, setOperator] = useState(null)
 
-
+    const handleButtonClick = (buttonLabel) => {
+      switch (buttonLabel) {
+        case '+':
+        case '-':
+        case '*':
+        case '÷':
+        case '%':
+          setOperator(buttonLabel);
+          setPreviousOperand(currentOperand);
+          setCurrentOperand('0');
+          break;
+    
+        case '=':
+          if (operator && previousOperand !== '') {
+            setPreviousOperand('');
+            setCurrentOperand(
+              calculateResult(parseFloat(previousOperand), parseFloat(currentOperand), operator).toString()
+            );
+            setOperator(null);
+          }
+          break;
+    
+        case 'AC':
+          setPreviousOperand('');
+          setCurrentOperand('0');
+          setOperator(null);
+          break;
+    
+        case '⌫':
+          setCurrentOperand((prev) => prev.slice(0, -1) || '0');
+          break;
+    
+        default:
+          setCurrentOperand((prev) => (prev === '0' || operator ? buttonLabel : prev + buttonLabel));
+          break;
+      }
+    };
+    
     const calculateResult = (prev, current, op) => {
       switch (op) {
         case '+':
@@ -18,56 +55,13 @@ const CalcBody = ( onClick ) => {
           return prev * current;
         case '÷':
           return prev / current;
+        case '%':
+          return prev % current;
         default:
-        
+          return current;
       }
     };
-  
-    const handleButtonClick = (buttonLabels) => {
-      switch (buttonLabels) {
-        case '+':
-        case '-':
-        case '*':
-        case '÷':
-            setOperator(buttonLabels);
-            setPreviousOperand(currentOperand);
-            setCurrentOperand('0');
-        break;
-
-        case '=':
-          if (operator && previousOperand !== '') {
-            const result = calculateResult(parseFloat(previousOperand) , parseFloat(currentOperand))
-            setPreviousOperand('');
-            setCurrentOperand(result.toString());
-            setOperator(null);
-          }
-        break;
-
-        case 'AC':
-          setPreviousOperand('');
-          setCurrentOperand('');
-          setOperator(null);
-        break;
-
-        case '⌫':
-          setCurrentOperand(currentOperand.slice(0, -1));
-        
-          
-        break;
-
-        default:
-          currentOperand === "0" || operator ? setCurrentOperand(buttonLabels) : setCurrentOperand(currentOperand + buttonLabels);
-          
-        break;
-
-
-        
-      }
-    }
-      
     
-
-
     const buttonLabels = [
       '±', '%', '⌫','AC', 
       '7', '8', '9', '÷',
