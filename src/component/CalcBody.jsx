@@ -50,13 +50,14 @@ const CalcBody = ( onClick ) => {
           setCurrentOperand((prev) => (prev === '0' ? '0' : (parseFloat(prev) * -1).toString()));
           break;
 
-          //
+          //PERIOD BUTTON
           case '.':
             if (!currentOperand.includes('.')) {
               setCurrentOperand((prev) => (prev === '0' || operator ? '0' : prev) + buttonLabel);
             }
             break;
       
+          //DEFAULT : OTHER NUMBER WILL RENDER IN THE CURRENT OPERAND
           default:
             setCurrentOperand((prev) => {
               
